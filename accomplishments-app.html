@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S&amp;T Accomplishments → Social Media Identifier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0d1b2a; --navy-2:#11263a; --navy-3:#16314a;
+    --gold:#c9a44c; --gold-soft:#e3c982; --gold-bright:#f0d68a;
+    --cream:#f4efe4; --cream-dim:#cdc6b6;
+    --green:#5e8c6a; --green-bright:#7cb088;
+    --red:#b06a5e;
+    --line:rgba(201,164,76,.28);
+    --maxw:1080px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:'Outfit',sans-serif;
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(201,164,76,.10), transparent 60%),
+      linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);
+    background-attachment:fixed; color:var(--cream); line-height:1.6; min-height:100vh;
+    padding:0 0 80px;
+  }
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;line-height:1.15}
+  a{color:var(--gold-soft)}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+
+  header{border-bottom:1px solid var(--line);padding:30px 0;text-align:center;background:rgba(13,27,42,.5)}
+  header .eyebrow{font-size:.85rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:600}
+  header h1{font-size:clamp(1.7rem,4vw,2.6rem);margin-top:8px}
+  header h1 .accent{color:var(--gold);font-style:italic}
+  header p{color:var(--cream-dim);margin-top:10px;font-size:1rem;max-width:680px;margin-left:auto;margin-right:auto}
+
+  .card{background:linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.015));
+    border:1px solid var(--line);border-radius:16px;padding:24px;margin-top:24px}
+  .card h2{font-size:1.3rem;color:var(--gold-soft);margin-bottom:6px}
+  .card .hint{font-size:.95rem;color:var(--cream-dim);margin-bottom:16px}
+
+  .step-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;
+    background:linear-gradient(180deg,var(--gold-soft),var(--gold));color:var(--navy);font-weight:700;font-size:.9rem;margin-right:10px;font-family:'Fraunces',serif}
+
+  textarea{width:100%;min-height:180px;background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:12px;
+    color:var(--cream);padding:14px;font-family:'Outfit';font-size:.95rem;resize:vertical}
+  textarea:focus{outline:none;border-color:var(--gold)}
+  input[type=url]{width:100%;background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:10px;color:var(--cream);padding:12px 14px;font-family:'Outfit';font-size:.95rem}
+  input[type=url]:focus{outline:none;border-color:var(--gold)}
+
+  .btn{display:inline-flex;align-items:center;gap:9px;cursor:pointer;border:none;font-family:'Outfit';font-weight:600;
+    font-size:1rem;padding:13px 28px;border-radius:32px;transition:.25s}
+  .btn-gold{background:linear-gradient(180deg,var(--gold-bright),var(--gold));color:var(--navy);box-shadow:0 8px 24px rgba(201,164,76,.3)}
+  .btn-gold:hover{transform:translateY(-2px)}
+  .btn-ghost{background:transparent;border:1.5px solid var(--gold);color:var(--gold-soft)}
+  .btn-ghost:hover{background:rgba(201,164,76,.12)}
+  .btn-sm{font-size:.85rem;padding:8px 16px}
+  .btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;align-items:center}
+
+  .toggle-row{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:16px;border-bottom:1px solid var(--line);padding-bottom:14px}
+  .toggle-row label{display:flex;align-items:center;gap:7px;cursor:pointer;font-size:.92rem;color:var(--cream-dim)}
+  .toggle-row input{accent-color:var(--gold)}
+
+  .summary{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px}
+  .stat{background:rgba(0,0,0,.2);border:1px solid var(--line);border-radius:12px;padding:14px 22px;text-align:center;flex:1;min-width:120px}
+  .stat .n{font-family:'Fraunces';font-size:2rem;color:var(--gold)}
+  .stat.yes .n{color:var(--green-bright)}
+  .stat .l{font-size:.82rem;letter-spacing:1px;text-transform:uppercase;color:var(--cream-dim)}
+
+  .result{border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:18px;background:rgba(0,0,0,.18)}
+  .result.qualify{border-left:4px solid var(--green-bright)}
+  .result.skip{border-left:4px solid rgba(176,106,94,.6);opacity:.92}
+  .result h3{font-size:1.12rem;color:var(--cream);margin-bottom:4px}
+  .result .src{font-size:.85rem;color:var(--cream-dim);margin-bottom:10px}
+  .result .src a{color:var(--gold-soft)}
+  .badge{display:inline-block;font-size:.72rem;letter-spacing:1px;text-transform:uppercase;font-weight:600;padding:3px 11px;border-radius:20px;margin:0 6px 6px 0}
+  .badge.cat{background:rgba(201,164,76,.16);color:var(--gold-bright);border:1px solid var(--line)}
+  .badge.q{background:rgba(94,140,106,.22);color:var(--green-bright);border:1px solid rgba(124,176,136,.4)}
+  .badge.s{background:rgba(176,106,94,.18);color:#d99;border:1px solid rgba(176,106,94,.4)}
+  .reason{font-size:.9rem;color:var(--cream-dim);margin:8px 0 0;font-style:italic}
+
+  .post-box{background:rgba(13,27,42,.6);border:1px dashed var(--gold);border-radius:12px;padding:16px;margin-top:14px;position:relative}
+  .post-box .lbl{font-size:.74rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:8px}
+  .post-box p{color:var(--cream);font-size:1rem;white-space:pre-wrap}
+  .post-box .meta-note{font-size:.82rem;color:var(--cream-dim);margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
+  .copy-btn{position:absolute;top:14px;right:14px;background:rgba(201,164,76,.15);border:1px solid var(--gold);color:var(--gold-soft);
+    border-radius:8px;padding:5px 12px;font-size:.78rem;cursor:pointer;font-family:'Outfit';font-weight:600}
+  .copy-btn:hover{background:rgba(201,164,76,.28)}
+
+  details.crit{margin-top:10px}
+  details.crit summary{cursor:pointer;color:var(--gold-soft);font-size:.92rem}
+  details.crit ul{margin:10px 0 0 18px;color:var(--cream-dim);font-size:.9rem}
+  details.crit li{margin-bottom:5px}
+
+  .empty{text-align:center;color:var(--cream-dim);padding:30px;font-style:italic}
+  .footnote{font-size:.85rem;color:var(--cream-dim);margin-top:26px;text-align:center;line-height:1.7}
+  .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(13,27,42,.3);border-top-color:var(--navy);border-radius:50%;animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <span class="eyebrow">Missouri S&amp;T · eConnection</span>
+    <h1>Accomplishments → <span class="accent">Social Media</span> Identifier</h1>
+    <p>Scans the monthly Accomplishments page, flags the items worth posting on the University LinkedIn, and drafts a short, ready-to-post version of each — based on the principle: <em>we don't want activity, we want distinction.</em></p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- STEP 1: INPUT -->
+  <div class="card">
+    <h2><span class="step-num">1</span>Paste the Accomplishments page link</h2>
+    <p class="hint">Paste any link to the eConnection Accomplishments page (or a specific month), then click Identify. The app fetches the page and analyzes it automatically.</p>
+
+    <input type="url" id="urlInput" value="https://econnection.mst.edu/category/accomplishments/" placeholder="https://econnection.mst.edu/category/accomplishments/">
+    <div class="btn-row">
+      <button class="btn btn-gold" id="fetchBtn" onclick="fetchPage()">Identify Accomplishments</button>
+      <button class="btn btn-ghost btn-sm" onclick="loadSample()">Try the May 2026 sample</button>
+    </div>
+
+    <details class="crit">
+      <summary>View the selection criteria this app applies</summary>
+      <ul>
+        <li><strong>A. Honors &amp; Recognition:</strong> elected Fellow of a professional society; national/international awards (excludes internal S&amp;T awards and "best paper" awards).</li>
+        <li><strong>B. Leadership Roles:</strong> keynote speeches; plenary talks; chairing a major conference or serving on a Board of Directors; President / Vice-President / Chair / Co-chair roles; Editor-in-Chief / editorial board lead.</li>
+        <li><strong>C. Competitive Achievements:</strong> winning or placing in regional / national / international competitions (especially students).</li>
+        <li><strong>D. Research &amp; Funding Milestones:</strong> large grants over $1M (especially federal — NSF, NIH, DoD); breakthrough outcomes (Science, Nature, PNAS).</li>
+        <li><strong>E. Institutional / External Impact:</strong> research featured in major media; work influencing policy / industry standards; patents licensed or commercialization milestones.</li>
+        <li><strong>Excluded as "activity, not distinction":</strong> presented a paper, attended a conference, generic talks, routine participation.</li>
+      </ul>
+    </details>
+  </div>
+
+  <!-- STEP 2: RESULTS -->
+  <div id="results"></div>
+
+  <p class="footnote">
+    This tool applies keyword-and-pattern rules to the criteria document and is meant as a <strong>first-pass filter</strong>; a human should confirm each pick before posting.<br>
+    Per the criteria, every selected item also needs a photo or video before going live on LinkedIn.
+  </p>
+</div>
+
+<script>
+/* ============================================================
+   1. CRITERIA ENGINE
+   Each rule: category, test against title+summary, reason, and
+   a generator hint for the LinkedIn rewrite.
+   ============================================================ */
+var RX = function(s){return new RegExp(s,'i');};
+
+var RULES = [
+  // ---- A. Honors & Recognition ----
+  { cat:'Honors — Fellow', test:function(t){
+      return /\bfellow\b/i.test(t) && !/fellowship program|graduate fellow|teaching fellow/i.test(t);
+    }, why:'Names an election/selection as a Fellow — a mark of distinction.' },
+
+  { cat:'Honors — National/Int’l Award', test:function(t){
+      if(/best paper/i.test(t)) return false;                 // excluded
+      if(/missouri s&t (award|honor)|internal award/i.test(t)) return false; // internal excluded
+      return /\b(national|international|outstanding|distinguished|lifetime achievement|medal|prize)\b.*\b(award|recognition|honor)\b/i.test(t)
+           || /\baward\b/i.test(t) && /\b(national|international|society|foundation|academy|association|outstanding|alumni)\b/i.test(t);
+    }, why:'Describes an external national/international award or recognition (internal S&T and best-paper awards are excluded).' },
+
+  // ---- B. Leadership Roles ----
+  { cat:'Leadership — Keynote', test:function(t){ return /\bkeynote\b/i.test(t); },
+    why:'Mentions a keynote address — a leadership distinction (a plain paper presentation would be excluded).' },
+
+  { cat:'Leadership — Plenary', test:function(t){ return /\bplenary\b/i.test(t); },
+    why:'Mentions a plenary talk (distinct from an ordinary conference talk).' },
+
+  { cat:'Leadership — Chair / Board', test:function(t){
+      return /\b(chair|co-chair|chaired)\b.*\b(conference|symposium|committee|board)\b/i.test(t)
+        || /\bboard of directors\b/i.test(t)
+        || /\bgeneral chair|program chair|conference chair\b/i.test(t);
+    }, why:'Indicates chairing a major conference or serving on a Board of Directors.' },
+
+  { cat:'Leadership — Officer Role', test:function(t){
+      return /\b(elected|named|appointed|selected)\b.*\b(president|vice[- ]president|chair|co-chair)\b/i.test(t)
+        || /\b(president|vice[- ]president)\b.*\b(of the|of a)\b.*\b(society|association|organization|council|academy)\b/i.test(t);
+    }, why:'Selection for a leadership role (President / Vice-President / Chair / Co-chair) in a major organization.' },
+
+  { cat:'Leadership — Editor-in-Chief', test:function(t){
+      return /editor[- ]in[- ]chief/i.test(t) || /lead(s|ing)? (an? )?editorial board/i.test(t);
+    }, why:'Names an Editor-in-Chief role or leadership of an editorial board.' },
+
+  // ---- C. Competitive Achievements ----
+  { cat:'Competition — Win/Place', test:function(t){
+      return /\b(won|win|first place|1st place|second place|2nd place|third place|3rd place|placed (first|second|third))\b/i.test(t)
+        && /\b(competition|contest|challenge|championship|hackathon)\b/i.test(t)
+        || /\bplace (first|second|third|1st|2nd|3rd)\b/i.test(t);
+    }, why:'Winning or placing in a competition (regional / national / international).' },
+
+  // ---- D. Research & Funding Milestones ----
+  { cat:'Funding — $1M+ Grant', test:function(t){
+      var m = t.match(/\$\s?([\d.]+)\s?(million|m\b|billion|b\b)/i);
+      if(m){ var v=parseFloat(m[1]); var unit=m[2].toLowerCase();
+        if(unit.indexOf('b')===0||unit.indexOf('billion')===0) return true;
+        return v>=1; }
+      return /\$\d{1,3}(,\d{3}){2,}/.test(t); // $1,000,000+
+    }, why:'Large grant at or above $1M (especially federal: NSF, NIH, DoD).' },
+
+  { cat:'Research — Breakthrough Venue', test:function(t){
+      return /\b(published|appears|featured).*(in )?(science|nature|pnas)\b/i.test(t)
+        || /\bin (the journal )?(science|nature|pnas)\b/i.test(t);
+    }, why:'Breakthrough/widely recognized outcome (Science, Nature, or PNAS).' },
+
+  // ---- E. Institutional or External Impact ----
+  { cat:'Impact — Major Media', test:function(t){
+      return /\b(featured|appeared|interviewed|quoted|published an article|op-ed|opinion piece)\b.*\b(the conversation|new york times|washington post|npr|bbc|cnn|forbes|scientific american|sierra|wired|nature news|reuters|associated press)\b/i.test(t)
+        || /\bin (the conversation|sierra|forbes|wired)\b/i.test(t);
+    }, why:'Research or expertise featured in major media — broad public reach.' },
+
+  { cat:'Impact — Policy / Standards', test:function(t){
+      return /\b(influenc|shap|inform)\w*\b.*\b(policy|legislation|industry standard|regulation)\b/i.test(t)
+        || /\b(testified|testimony)\b.*\b(congress|senate|committee)\b/i.test(t);
+    }, why:'Work influencing policy, regulation, or industry standards.' },
+
+  { cat:'Impact — Patent / Commercialization', test:function(t){
+      return /\b(patent (was )?licensed|licensed (its|the|a) patent|commercializ|spun out|startup launched|technology licensed)\b/i.test(t);
+    }, why:'Patent licensed or a major commercialization milestone.' }
+];
+
+// "Activity, not distinction" signals — used only to explain skips.
+var ACTIVITY = [
+  {rx:/present(ed|s)? (a )?(paper|research|poster)/i, label:'presented research/paper'},
+  {rx:/attend(ed|s)? (a |the )?(conference|meeting|workshop)/i, label:'attended a conference'},
+  {rx:/participat(e|ed|ing)/i, label:'participated'},
+  {rx:/publish(ed|es)? (an? )?(article|paper|study)/i, label:'routine publication (no major-venue/media signal)'},
+  {rx:/\btravel(ed|s)?\b.*\bconference\b/i, label:'travel to a conference'}
+];
+
+/* ============================================================
+   2. LINKEDIN REWRITE GENERATOR
+   Follows the doc's 4 rules: one sentence, impressive without
+   technical context, broad-audience, needs a photo/video.
+   ============================================================ */
+function pickName(title, summary){
+  // Try "Dr. First Last" or "First Last" from the summary first.
+  var m = summary.match(/\b(Dr\.\s[A-Z][a-z]+(?:\s[A-Z][a-z]+)+)/);
+  if(m) return m[1];
+  m = summary.match(/\b([A-Z][a-z]+\s[A-Z][a-z]+)(?:,| is| has| was| earned| received| won)/);
+  if(m) return m[1];
+  // fallback to leading word of title (last name)
+  return title.split(/\s+/)[0];
+}
+
+function genPost(item){
+  var t = item.title, s = item.summary, cats = item.cats;
+  var name = pickName(t, s);
+  var hash = '#MissouriST #MinerPride';
+  var lead, tag='';
+
+  if(cats.some(c=>/Fellow/.test(c))){
+    var soc = (s.match(/Fellow (?:of|by) (?:the )?([A-Z][\w&.\- ]+?)(?:\.|,| in| for|$)/)||[])[1]
+           || (s.match(/named (?:a )?[\w ]*?Fellow by (?:the )?([A-Z][\w&.\- ]+?)(?:\.|,|$)/)||[])[1]
+           || (s.match(/([A-Z][\w&.\- ]+?) [Ff]ellow/)||[])[1]
+           || 'a leading professional society';
+    lead = `Congratulations to ${name}, named a Fellow by ${soc.trim()} — one of the highest honors in the field. 🎓`;
+    tag='#Fellow #Excellence';
+  } else if(cats.some(c=>/National.*Award/.test(c))){
+    var aw = (s.match(/\b((?:[A-Z][\w.\-]+ )*(?:Award|Medal|Prize))\b/)||[])[1] || 'a major national award';
+    lead = `Proud to share that ${name} has earned the ${aw.trim()} in recognition of outstanding achievement. 🏆`;
+    tag='#Award #Recognition';
+  } else if(cats.some(c=>/Keynote|Plenary/.test(c))){
+    var kind = cats.some(c=>/Keynote/.test(c))?'keynote':'plenary';
+    lead = `${name} took the stage to deliver a ${kind} address — a sign of leadership and influence in the field. 🎤`;
+    tag='#Leadership #Keynote';
+  } else if(cats.some(c=>/Officer|Chair|Board/.test(c))){
+    lead = `${name} has been selected for a major leadership role, helping guide an entire professional community forward. 🌟`;
+    tag='#Leadership';
+  } else if(cats.some(c=>/Editor-in-Chief/.test(c))){
+    lead = `${name} has been named Editor-in-Chief, shaping the direction of research in the field. 📚`;
+    tag='#Leadership #Research';
+  } else if(cats.some(c=>/Competition/.test(c))){
+    var place = (t.match(/\b(first|second|third|1st|2nd|3rd)\b/i)||s.match(/\b(first|second|third|1st|2nd|3rd)\b/i)||['','top'])[1];
+    lead = `Our students placed ${place} in a national competition — proof that Miners don't just compete, they lead. 🥇`;
+    tag='#StudentSuccess #Competition';
+  } else if(cats.some(c=>/Funding/.test(c))){
+    var amt = (s.match(/\$\s?[\d.,]+\s?(million|billion|M|B)?/i)||['a major grant'])[0];
+    lead = `Big news: ${name} has secured ${amt.trim()} in research funding to tackle real-world challenges. 💡`;
+    tag='#Research #Innovation';
+  } else if(cats.some(c=>/Breakthrough/.test(c))){
+    lead = `Groundbreaking work from ${name} has been published in one of science's most prestigious journals. 🔬`;
+    tag='#Research #Discovery';
+  } else if(cats.some(c=>/Media/.test(c))){
+    var outlet = (s.match(/\b(The Conversation|Sierra|Forbes|Wired|NPR|BBC|CNN|New York Times|Washington Post|Scientific American)\b/i)||['major media'])[0];
+    lead = `${name}'s expertise is reaching the world — featured in ${outlet}, bringing S&T research to a broad audience. 🌍`;
+    tag='#ResearchImpact #ThoughtLeadership';
+  } else if(cats.some(c=>/Policy/.test(c))){
+    lead = `${name}'s work is shaping policy and standards far beyond campus — research that makes a real difference. 🏛️`;
+    tag='#ResearchImpact #Policy';
+  } else if(cats.some(c=>/Patent/.test(c))){
+    lead = `Innovation in action: ${name}'s technology is moving from the lab to the real world. 🚀`;
+    tag='#Innovation #Patent';
+  } else {
+    lead = `Congratulations to ${name} on a notable achievement at Missouri S&T. 🎉`;
+  }
+  return {text: lead + '\n\n' + (tag?tag+' ':'') + hash, name:name};
+}
+
+/* ============================================================
+   3. PARSER — split the page content into accomplishment items.
+   Handles three shapes returned by the various fetch routes:
+     (a) real HTML  (allorigins / corsproxy / thingproxy)
+     (b) markdown   (r.jina.ai → "### [Title](url)" + summary)
+     (c) plain text (fallback)
+   ============================================================ */
+function parseItems(raw, isHTML){
+  var items = [];
+
+  // ---- (a) Real HTML ----
+  if(isHTML){
+    try{
+      var doc = new DOMParser().parseFromString(raw,'text/html');
+      var heads = Array.from(doc.querySelectorAll('h1, h2, h3, h4'));
+      heads.forEach(function(h){
+        var a = h.querySelector('a'); if(!a) return;
+        var title = a.textContent.trim();
+        var link = a.getAttribute('href') || '';
+        if(!/econnection\.mst\.edu\/\d{4}\/\d{2}\//.test(link)) return; // only article permalinks
+        var sib = h.nextElementSibling, summary='', date='', hops=0;
+        while(sib && hops<8){
+          var tx = (sib.textContent||'').trim();
+          var dm = tx.match(/Posted by .+? on (.+)/i);
+          if(dm){ date=dm[1]; }
+          else if(tx.length>60 && !/facebook|twitter|linkedin|read more/i.test(tx) && !summary){ summary=tx; }
+          if(/read more/i.test(tx) || /^Posted by/i.test((sib.querySelector&&sib.textContent||''))) {}
+          if(sib.tagName && /^H[1-4]$/.test(sib.tagName)) break; // next article
+          sib = sib.nextElementSibling; hops++;
+        }
+        items.push({title:title, summary:summary||title, link:link, date:date});
+      });
+    }catch(e){}
+  }
+
+  // ---- (b) Markdown (jina) — "### [Title](url)" then "Posted by ... on DATE" then summary ----
+  if(items.length===0){
+    var mdHead = /^#{2,4}\s*\[([^\]]+)\]\((https?:\/\/econnection\.mst\.edu\/\d{4}\/\d{2}\/[\w-]+\/)\)/gm;
+    var lines = raw.split('\n');
+    var positions=[]; var m;
+    // collect heading line indices
+    for(var li=0; li<lines.length; li++){
+      var hm = lines[li].match(/^#{2,4}\s*\[([^\]]+)\]\((https?:\/\/econnection\.mst\.edu\/\d{4}\/\d{2}\/[\w-]+\/)\)/);
+      if(hm) positions.push({i:li, title:hm[1].trim(), link:hm[2]});
+    }
+    positions.forEach(function(p, idx){
+      var endi = idx+1<positions.length ? positions[idx+1].i : lines.length;
+      var date='', summary='';
+      for(var k=p.i+1; k<endi; k++){
+        var ln = lines[k].trim();
+        if(!ln) continue;
+        var dm = ln.match(/Posted by .+? on (.+)/i); if(dm){ date=dm[1].replace(/\].*$/,'').trim(); continue; }
+        if(/^\[?https?:/i.test(ln) || /facebook|twitter|linkedin|read more/i.test(ln)) continue;
+        // strip markdown link syntax/asterisks
+        var clean = ln.replace(/\[([^\]]+)\]\([^)]*\)/g,'$1').replace(/[*_#>]/g,'').trim();
+        if(clean.length>50 && !summary){ summary=clean; }
+      }
+      items.push({title:p.title, summary:summary||p.title, link:p.link, date:date});
+    });
+  }
+
+  // ---- (c) Plain text fallback ----
+  if(items.length===0){
+    var L = raw.split('\n').map(s=>s.trim());
+    for(var i=0;i<L.length;i++){
+      var lm = L[i].match(/Posted by .+? on (.+)/i);
+      if(lm){
+        // title = nearest non-empty line above
+        var title='';
+        for(var a=i-1;a>=0;a--){ if(L[a]){ title=L[a].replace(/^[#\[\]*\s]+/,'').replace(/\]\(.*$/,'').trim(); break; } }
+        // summary = next substantial line below (skip links/share rows)
+        var summary='';
+        for(var b=i+1;b<L.length;b++){
+          if(!L[b]) continue;
+          if(/^(\[?https?:|posted by|read more|#)/i.test(L[b])) continue;
+          var clean=L[b].replace(/\[([^\]]+)\]\([^)]*\)/g,'$1').trim();
+          if(clean.length>50){ summary=clean; break; }
+        }
+        var linkm = (L[i].match(/https?:\/\/econnection\.mst\.edu\/\d{4}\/\d{2}\/[\w-]+\//)||[])[0]||'';
+        if(title && title.length<200){
+          items.push({title:title, summary:summary||title, link:linkm, date:lm[1].replace(/\].*$/,'').trim()});
+        }
+      }
+    }
+  }
+
+  // Deduplicate by title
+  var seen={}, out=[];
+  items.forEach(function(it){ var k=it.title.toLowerCase(); if(!seen[k]&&it.title){seen[k]=1;out.push(it);} });
+  return out;
+}
+
+/* ============================================================
+   4. SCORING + RENDER
+   ============================================================ */
+function scoreItem(it){
+  var hay = (it.title+'. '+it.summary);
+  var cats=[], reasons=[];
+  RULES.forEach(function(r){ try{ if(r.test(hay)){ cats.push(r.cat); reasons.push(r.why); } }catch(e){} });
+  var activity=[];
+  ACTIVITY.forEach(function(a){ if(a.rx.test(hay)) activity.push(a.label); });
+  return {cats:cats, reasons:reasons, activity:activity, qualify:cats.length>0};
+}
+
+function render(items){
+  var box = document.getElementById('results');
+  if(!items.length){
+    box.innerHTML='<div class="card"><p class="empty">No accomplishment items were detected on that page. Check the link, or try the May 2026 sample.</p></div>';
+    return;
+  }
+  var scored = items.map(function(it){ var s=scoreItem(it); return Object.assign({},it,s); });
+  var q = scored.filter(s=>s.qualify);
+  var sk = scored.filter(s=>!s.qualify);
+
+  var html = '<div class="card"><h2>Analysis Summary</h2>'
+    + '<div class="summary">'
+    + '<div class="stat"><div class="n">'+scored.length+'</div><div class="l">Items scanned</div></div>'
+    + '<div class="stat yes"><div class="n">'+q.length+'</div><div class="l">Recommended to post</div></div>'
+    + '<div class="stat"><div class="n">'+sk.length+'</div><div class="l">Filtered out</div></div>'
+    + '</div></div>';
+
+  // Qualifying
+  html += '<div class="card"><h2>✅ Recommended for LinkedIn</h2>';
+  if(!q.length) html += '<p class="empty">Nothing met the distinction criteria this time.</p>';
+  q.forEach(function(it,idx){
+    var post = genPost(it);
+    html += '<div class="result qualify">'
+      + '<h3>'+esc(it.title)+'</h3>'
+      + '<div class="src">'+(it.date?esc(it.date)+' · ':'')+(it.link?'<a href="'+it.link+'" target="_blank">source ↗</a>':'')+'</div>'
+      + it.cats.map(c=>'<span class="badge cat">'+esc(c)+'</span>').join('')
+      + '<p class="reason">Why selected: '+esc(it.reasons[0])+'</p>'
+      + '<div class="post-box"><button class="copy-btn" onclick="copyPost(this)">Copy</button>'
+      + '<div class="lbl">LinkedIn-ready draft</div>'
+      + '<p>'+esc(post.text)+'</p>'
+      + '<div class="meta-note">📸 Attach a photo or video before posting (required by the criteria). Tone: one clear sentence, impressive without technical jargon, broad-audience.</div>'
+      + '</div></div>';
+  });
+  html += '</div>';
+
+  // Skipped
+  html += '<div class="card"><h2>⤫ Filtered out (activity, not distinction)</h2>';
+  sk.forEach(function(it){
+    html += '<div class="result skip">'
+      + '<h3>'+esc(it.title)+'</h3>'
+      + '<div class="src">'+(it.date?esc(it.date)+' · ':'')+(it.link?'<a href="'+it.link+'" target="_blank">source ↗</a>':'')+'</div>'
+      + (it.activity.length?it.activity.map(a=>'<span class="badge s">'+esc(a)+'</span>').join(''):'<span class="badge s">no distinction signal</span>')
+      + '<p class="reason">Not selected: routine participation or no national/leadership/impact signal found. Review manually if you disagree.</p>'
+      + '</div>';
+  });
+  html += '</div>';
+
+  box.innerHTML = html;
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function copyPost(btn){
+  var p = btn.parentElement.querySelector('p').innerText;
+  navigator.clipboard.writeText(p).then(function(){
+    var o=btn.textContent; btn.textContent='Copied!'; setTimeout(function(){btn.textContent=o;},1500);
+  });
+}
+
+/* ============================================================
+   5. INPUT HANDLERS
+   ============================================================ */
+function fetchPage(){
+  var url = document.getElementById('urlInput').value.trim();
+  if(!url){ alert('Please paste a page link first.'); return; }
+  if(!/^https?:\/\//i.test(url)){ url='https://'+url; }
+  var btn = document.getElementById('fetchBtn');
+  var orig = 'Identify Accomplishments';
+  btn.innerHTML='<span class="spinner"></span> Identifying...'; btn.disabled=true;
+  document.getElementById('results').innerHTML='';
+
+  // Public read-only CORS proxies (tried in order until one returns usable HTML)
+  var proxies = [
+    function(u){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(u);},
+    function(u){return 'https://corsproxy.io/?url='+encodeURIComponent(u);},
+    function(u){return 'https://thingproxy.freeboard.io/fetch/'+u;},
+    function(u){return 'https://r.jina.ai/'+u;} // returns readable text/markdown
+  ];
+  var tried=0;
+  function done(){ btn.innerHTML=orig; btn.disabled=false; }
+
+  function attempt(){
+    if(tried>=proxies.length){
+      done();
+      document.getElementById('results').innerHTML =
+        '<div class="card"><p class="empty">Could not retrieve the page automatically. '
+        + 'The public fetch services may be temporarily unavailable or blocking the request. '
+        + 'Please wait a moment and try again, or try the May 2026 sample to see the identifier in action.</p></div>';
+      return;
+    }
+    fetch(proxies[tried](url))
+      .then(function(r){ if(!r.ok) throw new Error('status '+r.status); return r.text(); })
+      .then(function(txt){
+        // jina.ai returns markdown/plain text; others return HTML. Try HTML parse first, then text.
+        var isHTML = /<\/?(div|article|h3|a|p)\b/i.test(txt);
+        var items = isHTML ? parseItems(txt,true) : [];
+        if(!items.length) items = parseItems(txt,false);
+        if(!items.length){ tried++; attempt(); return; } // try next proxy if nothing parsed
+        done();
+        render(items);
+      })
+      .catch(function(){ tried++; attempt(); });
+  }
+  attempt();
+}
+
+/* Sample = the May 2026 page content, so the tool is demonstrable offline */
+function loadSample(){
+  render(parseItems(SAMPLE,false));
+}
+var SAMPLE = [
+"Fogg examines postwar challenges faced by Holocaust survivors",
+"Posted by Kimber Crull on May 5, 2026",
+"Dr. Shannon Fogg, professor and chair of history and political science, published an article in The Conversation examining the obstacles Holocaust survivors in France faced after World War II, including property loss and bureaucratic barriers.",
+"",
+"Huang receives Clemson University alumni award",
+"Posted by Kimber Crull on May 5, 2026",
+"Dr. Jie Huang, the Roy A. Wilkens Telecommunications Professor of Electrical and Computer Engineering, received an Outstanding Young Alumni Award from Clemson University in April. The award recognizes professional achievement and contributions by early-career alumni.",
+"",
+"Essien named Schlumberger Foundation fellow",
+"Posted by Kimber Crull on May 5, 2026",
+"Ellen Essien, a Ph.D. student in mining engineering, has been named a 2026 Faculty for the Future Fellow by the Schlumberger Foundation.",
+"",
+"Reed publishes article in The Conversation",
+"Posted by Kimber Crull on May 5, 2026",
+"Dr. Ross Channing Reed, lecturer of philosophy, published an article titled The good life requires two things in The Conversation on April 9.",
+"",
+"Epting publishes on ethics of urban air mobility",
+"Posted by Kimber Crull on May 5, 2026",
+"Dr. Shane Epting, associate professor of philosophy, published Urban air mobility and the problem of moral prioritization in the journal Discover Cities.",
+"",
+"Grebowicz reports from Texas on border wall opposition",
+"Posted by Kimber Crull on May 5, 2026",
+"Dr. Margret Grebowicz, the Maxwell C. Weiner Distinguished Professor of Humanities, reported from the Big Bend region of Texas on opposition to proposed border wall construction. Her article was published in Sierra magazine.",
+"",
+"Undergraduate researchers present at Missouri Academy of Science",
+"Posted by Kimber Crull on May 5, 2026",
+"Missouri S&T undergraduate students presented research at the 2026 annual meeting of the Missouri Academy of Science.",
+"",
+"Students present research, participate in discussions at philosophy conference",
+"Posted by Kimber Crull on May 5, 2026",
+"On April 3, six Missouri S&T students traveled to St. Louis to participate in the Webster University Philosophy Student Conference.",
+"",
+"Materials science students place first, third in national glass competition",
+"Posted by Kimber Crull on May 5, 2026",
+"Adekunle Adesanya, a Ph.D. student in material sciences and engineering, earned first place and Reese Hutchins, a Ph.D. student in ceramic engineering, earned third place in the inaugural Glass Strengthening Competition organized by the Ceramic and Glass Industry Foundation.",
+"",
+"Winners announced at Miners Solving for Tomorrow conference",
+"Posted by Kimber Crull on May 5, 2026",
+"The 2026 Miners Solving for Tomorrow Student Research Conference recognized undergraduate and graduate research following evaluation by more than 20 judges."
+].join("\n");
+</script>
+</body>
+</html>
